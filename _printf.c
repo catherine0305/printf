@@ -1,5 +1,6 @@
 #include "main.h"
-void print_buffer(char buffer[], int *buff_in);
+#include <stdio.h>
+#include <stdarg.h>
 /**
  * _printf - a printf function
  * @format: format
@@ -7,55 +8,43 @@ void print_buffer(char buffer[], int *buff_in);
  */
 int _printf(const char *format, ...)
 {
-	int i, prin = 0, prin_chars = 0;
-	int flags, width, precision, size, buff_in = 0;
-	va_list list;
-	char buffer[BUFFER_SIZE];
+	int im, l = 0;
+	va_list ca;
 
-	if (format == NULL)
+	va_start(ca, format);
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
-
-	va_start(list, format);
-
-	for (i = 0; format && format[i] != '\0'; i++)
+	for (im = 0; format[im] != '\0'; im++)
 	{
-		if (format[i] != '%')
+		if (format[im] == '\0')
+			break;
+		if (format[im] == '%')
 		{
-			buffer[buff_in++] = format[i];
-			if (buff_in == BUFFER_SIZE)
-				print_buffer(buffer, &buff_in);
-			/*write(1, &format[i], 1);*/
-			prin_chars++;
+			if (format[im + 1] == '%')
+			{
+				_putchar('%');
+				l++;
+			}
+			else if (format[im + 1] == 'd' || format[im + 1] == 'i')
+			{
+				l = print_num(ca, l);
+			}
+			else if (format[im + 1] == 'c')
+			{
+				l = print_char(ca, l);
+			}
+			else if (format[im + 1] == 's')
+			{
+				l = print_str(ca, l);
+			}
+			im++;
 		}
 		else
 		{
-			print_buffer(buffer, &buff_in);
-			flags = get_flags(format, &i);
-			width = get_width(format, &i, list);
-			precision = get_precision(format, &i, list);
-			size = get_size(format, &i);
-			++i;
-			prin = handle_print(format, &i, list, buffer, flags,
-					width, precision, size);
-			if (prin == -1)
-				return (-1);
-			prin_chars += prin;
+			_putchar(format[im]);
+			l++;
 		}
 	}
-	print_buffer(buffer, &buff_in);
-
-	va_end(list);
-
-	return (prin_chars);
-}
-/**
- * print_buffer - prints the contents of buffer
- * @buffer: array of characters
- * @buff_in: index to add next character
- */
-void print_buffer(char buffer[], int *buff_in)
-{
-	if (*buff_in > 0)
-		write(1, &buffer[0], *buff_in);
-	*buff_in = 0;
+	va_end(ca);
+	return (l);
 }
