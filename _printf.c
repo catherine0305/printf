@@ -8,12 +8,13 @@
  */
 int _printf(const char *format, ...)
 {
-	int im, l = 0;
+	int im, l = 0, s_l;
 	va_list ca;
 
-	va_start(ca, format);
 	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
+	va_start(ca, format);
+
 	for (im = 0; format[im] != '\0'; im++)
 	{
 		if (format[im] == '\0')
@@ -25,24 +26,22 @@ int _printf(const char *format, ...)
 				_putchar('%');
 				l++;
 			}
-			else if (format[im + 1] == 'd' || format[im + 1] == 'i')
-			{
-				l = print_num(ca, l);
-			}
 			else if (format[im + 1] == 'c')
 			{
-				l = print_char(ca, l);
+				_putchar(va_arg(ca, int));
+				im++;
 			}
 			else if (format[im + 1] == 's')
 			{
-				l = print_str(ca, l);
+				s_l = puts(va_arg(ca, char *));
+				im++;
+				l += (s_l - 1);
 			}
 			im++;
 		}
-		else
+		else if (format[im] != '%')
 		{
 			_putchar(format[im]);
-			l++;
 		}
 	}
 	va_end(ca);
