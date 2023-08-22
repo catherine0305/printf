@@ -7,8 +7,6 @@
 
 int _putchar(char c);
 int _printf(const char *format, ...);
-int print_num(va_list ca, int l);
-int print_str(va_list ca, int l);
-int print_char(va_list ca, int l);
+int puts(char *c);
 
 #endif
