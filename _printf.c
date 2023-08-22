@@ -33,7 +33,7 @@ int _printf(const char *format, ...)
 			}
 			else if (format[im + 1] == 's')
 			{
-				s_l = puts(va_arg(ca, char *));
+				s_l = putsss(va_arg(ca, char *));
 				im++;
 				l += (s_l - 1);
 			}
