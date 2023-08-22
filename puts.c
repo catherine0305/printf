@@ -1,10 +1,10 @@
 #include "main.h"
 /**
- * puts - prints a string
+ * putsss - prints a string
  * @c: string to print
  * Return: number of bytes
  */
-int puts(char *c)
+int putsss(char *c)
 {
 	int l = 0;
 
